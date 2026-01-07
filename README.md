@@ -154,3 +154,162 @@ nest g module projects
 nest g module epics
 nest g module tasks
 nest g module ai
+
+
+
+
+
+Create User
+POST http://localhost:3000/users
+
+{
+  "name": "Aarya",
+  "email": "aarya@example.com",
+  "password": "password123",
+  "role": "MANAGER",
+  "companyName": "TCS",
+  "contactInfo": "9876543210"
+}
+
+
+Assuming you have a route like:
+
+GET http://localhost:3000/users
+
+
+
+Get Single User
+
+Method: GET
+
+URL: http://localhost:3000/users/736d5e5e-3c72-4eb2-be26-24c445221f5e (replace with your actual user ID)
+
+Headers:
+
+Authorization: Bearer <your_access_token>
+
+
+
+Get a valid JWT from login.
+
+Add header:
+
+Authorization: Bearer <JWT_TOKEN>
+
+👥 TEAM MEMBER
+
+TeamMember is linked to User
+Meaning → create User FIRST, then TeamMember.
+
+Create Team Member
+POST http://localhost:3000/team-members
+
+{
+  "userId": "USER_UUID",
+  "role": "Backend Developer",
+  "availabilityHours": 40,
+  "currentWorkload": 5
+}
+
+🧠 SKILLS
+
+Belongs to TeamMember
+
+Add Skill to Member
+POST http://localhost:3000/skills
+
+{
+  "skillName": "Node.js",
+  "level": "Expert",
+  "experienceYears": 2,
+  "memberId": "TEAM_MEMBER_UUID"
+}
+
+🏗 PROJECT
+
+Project belongs to User (Manager)
+
+Create Project
+POST http://localhost:3000/projects
+
+{
+  "name": "AI Analyst System",
+  "description": "Smart engineering productivity + cost optimizer",
+  "managerId": "USER_UUID",
+  "startDate": "2026-01-10",
+  "status": "PLANNED",
+  "laborCost": 0,
+  "reworkCost": 0,
+  "infrastructureCost": 0,
+  "totalSavings": 0
+}
+
+📚 EPIC
+
+Epics belong to Projects
+
+POST http://localhost:3000/epics
+
+{
+  "title": "Backend Architecture",
+  "description": "Core system foundation",
+  "projectId": "PROJECT_UUID"
+}
+
+✅ TASK
+
+Tasks belong to Epic
+Can be assigned to Team Member (optional)
+
+POST http://localhost:3000/tasks
+
+{
+  "title": "Build Authentication",
+  "description": "JWT + Guards + Roles",
+  "requiredSkills": ["Node.js", "NestJS", "JWT"],
+  "priority": "HIGH",
+  "status": "PENDING",
+  "estimatedHours": 12,
+  "epicId": "EPIC_UUID",
+  "assignedToId": "TEAM_MEMBER_UUID"
+}
+
+📈 PERFORMANCE HISTORY
+
+Belongs to Team Member
+
+POST http://localhost:3000/performance-history
+
+{
+  "taskType": "API Development",
+  "avgCompletionTime": 12,
+  "qualityScore": 8,
+  "completedTasks": 5,
+  "memberId": "TEAM_MEMBER_UUID"
+}
+
+🤖 AI RECORDS
+
+Belongs to Project
+
+POST http://localhost:3000/ai
+
+{
+  "projectId": "PROJECT_UUID",
+  "laborCost": 25000,
+  "reworkCost": 3000,
+  "infrastructureCost": 7000,
+  "totalSavings": 8000,
+  "description": "Optimize sprint assignments",
+  "createdBy": "MANAGER_USER_ID"
+}
+
+
+1️ Create User
+2️ Convert User → TeamMember
+3️ Add Skills
+4️ Create Project
+5️ Add Epics
+6️ Add Tasks
+7️Performance History
+8️ AI Suggestions

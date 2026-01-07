@@ -1,46 +1,34 @@
-// // src/app.module.ts
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { PrismaService } from './prisma/prisma.service';
-// import { AuthModule } from './auth/auth.module'; // ← ONLY import the module
-
-// @Module({
-//   imports: [
-//     AuthModule, // ← Only this line for auth
-//   ],
-//   controllers: [AppController],
-//   providers: [AppService, PrismaService],
-// })
-// export class AppModule {}
-
-
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
+
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt.guard';
-import { UsersModule } from './users/users.module';
-import { TeamMembersService } from './team-members/team-members.service';
-import { SkillsService } from './skills/skills.service';
-import { ProjectsService } from './projects/projects.service';
-import { EpicsService } from './epics/epics.service';
-import { TasksService } from './tasks/tasks.service';
-import { AiService } from './ai/ai.service';
 
-import { TeamMembersController } from './team-members/team-members.controller';
-import { TeamMembersModule } from './team-members/team-members.module';
+
+
+import { UsersModule } from './users/users.module';
+import { TeamMemberModule } from './team-members/team-members.module';
+import { SkillModule } from './skills/skill.module';
+import { ProjectModule } from './projects/project.module';
+import { EpicModule } from './epics/epic.module';
+import { TaskModule } from './tasks/task.module';
+import { AiModule } from './ai/ai.module';
+import { PerformanceModule } from './performance/performance.module';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
-    TeamMembersModule,
-    TeamMembersController,
-    // future modules like users, team-members, projects, tasks will go here
+    TeamMemberModule,
+    SkillModule,
+    ProjectModule,
+    EpicModule,
+    TaskModule,
+    AiModule,
+    PerformanceModule,
   ],
   controllers: [AppController],
   providers: [
@@ -48,14 +36,8 @@ import { TeamMembersModule } from './team-members/team-members.module';
     PrismaService,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard, // ← This makes all routes protected by default
+      useClass: JwtAuthGuard,
     },
-    TeamMembersService,
-    SkillsService,
-    ProjectsService,
-    EpicsService,
-    TasksService,
-    AiService,
   ],
 })
 export class AppModule {}

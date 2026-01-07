@@ -1,28 +1,40 @@
+// skill.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Skill } from '@prisma/client';
+import { CreateSkillDto } from './dto/create-skill.dto';
+import { UpdateSkillDto } from './dto/update-skill.dto';
 
 @Injectable()
-export class SkillsService {
+export class SkillService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(): Promise<Skill[]> {
-    return this.prisma.skill.findMany();
+  create(dto: CreateSkillDto) {
+    return this.prisma.skill.create({ data: dto });
   }
 
-  findOne(id: string): Promise<Skill | null> {
-    return this.prisma.skill.findUnique({ where: { id } });
+  findAll() {
+    return this.prisma.skill.findMany({
+      include: { member: true },
+    });
   }
 
-  create(data: Prisma.SkillCreateInput): Promise<Skill> {
-    return this.prisma.skill.create({ data });
+  findOne(id: string) {
+    return this.prisma.skill.findUnique({
+      where: { id },
+      include: { member: true },
+    });
   }
 
-  update(id: string, data: Prisma.SkillUpdateInput): Promise<Skill> {
-    return this.prisma.skill.update({ where: { id }, data });
+  update(id: string, dto: UpdateSkillDto) {
+    return this.prisma.skill.update({
+      where: { id },
+      data: dto,
+    });
   }
 
-  remove(id: string): Promise<Skill> {
-    return this.prisma.skill.delete({ where: { id } });
+  remove(id: string) {
+    return this.prisma.skill.delete({
+      where: { id },
+    });
   }
 }

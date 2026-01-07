@@ -1,8 +1,13 @@
 export class CreateTaskDto {
   title: string;
   description?: string;
-  status?: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  requiredSkills: string[];
+  priority?: string;
+  status?: string;
+  estimatedHours?: number;
+  startDate?: Date;
+  endDate?: Date;
+  dependencyTaskId?: string;
   epicId: string;
-  assignedTo?: string; // team member ID
-  dueDate?: Date;
+  assignedToId?: string;
 }

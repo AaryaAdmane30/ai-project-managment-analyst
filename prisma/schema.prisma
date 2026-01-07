@@ -143,3 +143,17 @@ enum Role {
   DEVELOPER
   ADMIN
 }
+
+
+// 9. // 9. AI Suggestions / Records
+model Ai {
+id               String   @id @default(uuid())
+  projectId        String
+  laborCost        Float?
+  reworkCost       Float?
+  infrastructureCost Float?
+  totalSavings     Float?
+  description      String?
+  createdBy        String?
+  createdAt        DateTime @default(now())
+}

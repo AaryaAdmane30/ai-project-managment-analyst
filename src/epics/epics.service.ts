@@ -1,28 +1,40 @@
+// src/epics/epics.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Epic } from '@prisma/client';
+import { CreateEpicDto } from './dto/create-epic.dto';
+import { UpdateEpicDto } from './dto/update-epic.dto';
 
 @Injectable()
-export class EpicsService {
+export class EpicService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(): Promise<Epic[]> {
-    return this.prisma.epic.findMany();
+  create(dto: CreateEpicDto) {
+    return this.prisma.epic.create({ data: dto });
   }
 
-  findOne(id: string): Promise<Epic | null> {
-    return this.prisma.epic.findUnique({ where: { id } });
+  findAll() {
+    return this.prisma.epic.findMany({
+      include: { project: true, tasks: true },
+    });
   }
 
-  create(data: Prisma.EpicCreateInput): Promise<Epic> {
-    return this.prisma.epic.create({ data });
+  findOne(id: string) {
+    return this.prisma.epic.findUnique({
+      where: { id },
+      include: { project: true, tasks: true },
+    });
   }
 
-  update(id: string, data: Prisma.EpicUpdateInput): Promise<Epic> {
-    return this.prisma.epic.update({ where: { id }, data });
+  update(id: string, dto: UpdateEpicDto) {
+    return this.prisma.epic.update({
+      where: { id },
+      data: dto,
+    });
   }
 
-  remove(id: string): Promise<Epic> {
-    return this.prisma.epic.delete({ where: { id } });
+  remove(id: string) {
+    return this.prisma.epic.delete({
+      where: { id },
+    });
   }
 }

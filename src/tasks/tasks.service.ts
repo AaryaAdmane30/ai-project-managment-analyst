@@ -2,27 +2,53 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Task } from '@prisma/client';
 
+import { CreateTaskDto } from './dto/create-task.dto';
+
+import { UpdateTaskDto } from './dto/update-task.dto';
+
 @Injectable()
-export class TasksService {
+export class TaskService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(): Promise<Task[]> {
-    return this.prisma.task.findMany();
+  create(dto: CreateTaskDto) {
+    return this.prisma.task.create({
+      data: dto,
+    });
   }
 
-  findOne(id: string): Promise<Task | null> {
-    return this.prisma.task.findUnique({ where: { id } });
+  findAll() {
+    return this.prisma.task.findMany({
+      include: {
+        epic: true,
+        assignedTo: true,
+        dependsOn: true,
+        blockedBy: true,
+      },
+    });
   }
 
-  create(data: Prisma.TaskCreateInput): Promise<Task> {
-    return this.prisma.task.create({ data });
+  findOne(id: string) {
+    return this.prisma.task.findUnique({
+      where: { id },
+      include: {
+        epic: true,
+        assignedTo: true,
+        dependsOn: true,
+        blockedBy: true,
+      },
+    });
   }
 
-  update(id: string, data: Prisma.TaskUpdateInput): Promise<Task> {
-    return this.prisma.task.update({ where: { id }, data });
+  update(id: string, dto: UpdateTaskDto) {
+    return this.prisma.task.update({
+      where: { id },
+      data: dto,
+    });
   }
 
-  remove(id: string): Promise<Task> {
-    return this.prisma.task.delete({ where: { id } });
+  remove(id: string) {
+    return this.prisma.task.delete({
+      where: { id },
+    });
   }
 }

@@ -1,10 +1,11 @@
+// src/team-member/team-member.module.ts
 import { Module } from '@nestjs/common';
-import { TeamMembersService } from './team-members.service';
-import { TeamMembersController } from './team-members.controller';
 import { PrismaService } from '../prisma/prisma.service';
-
+import { TeamMemberController } from './team-members.controller';
+import { TeamMemberService } from './team-members.service';
 @Module({
-  controllers: [TeamMembersController],
-  providers: [TeamMembersService, PrismaService],
+  controllers: [TeamMemberController],
+  providers: [TeamMemberService, PrismaService],
+  exports: [TeamMemberService],
 })
-export class TeamMembersModule {}
+export class TeamMemberModule {}
